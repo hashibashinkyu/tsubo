@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ツボ逆引き">
+<title>ツボ逆引き</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="theme-color" content="#1f4e6b">
+<style>
+:root{--bg:#f1f4f6;--card:#fff;--tx:#1d2a33;--sub:#62707a;--ac:#1f4e6b;--acbg:#dfeaf1;--bd:#d6dee4;--warn:#a8401c;--warnbg:#fbeae3;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12181d;--card:#1b242b;--tx:#e6edf1;--sub:#93a2ad;--ac:#8fc1e0;--acbg:#23333e;--bd:#2c3a44;--warn:#f0a98a;--warnbg:#3a2820;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#12181d;--card:#1b242b;--tx:#e6edf1;--sub:#93a2ad;--ac:#8fc1e0;--acbg:#23333e;--bd:#2c3a44;--warn:#f0a98a;--warnbg:#3a2820;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.6 -apple-system,"Hiragino Sans","Hiragino Kaku Gothic ProN",sans-serif}
+.w{max-width:640px;margin:0 auto;padding:12px 14px 40px}
+h1{font:600 20px "Hiragino Mincho ProN","Yu Mincho",serif;margin:6px 0 10px;letter-spacing:.08em}
+.tabs{display:flex;gap:6px;margin-bottom:10px}
+.tabs button{flex:1;padding:9px;border:1px solid var(--bd);background:var(--card);color:var(--sub);border-radius:10px;font:inherit;font-size:15px}
+.tabs button.on{background:var(--ac);color:var(--bg);border-color:var(--ac)}
+input[type=search],textarea{width:100%;padding:11px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--card);color:var(--tx);font:inherit;font-size:16px}
+textarea{min-height:110px;resize:vertical}
+.list{margin-top:10px;display:grid;gap:8px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:10px 12px;cursor:pointer}
+.card:active{background:var(--acbg)}
+.nm{font:600 18px "Hiragino Mincho ProN","Yu Mincho",serif}
+small,.sub{color:var(--sub);font-size:13px}
+.tag{display:inline-block;margin-left:6px;padding:0 8px;border-radius:99px;background:var(--acbg);color:var(--ac);font-size:12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.chip{padding:4px 12px;border:1px solid var(--ac);color:var(--ac);background:transparent;border-radius:99px;font:inherit;font-size:15px}
+.set{border-left:4px solid var(--ac);background:var(--card);border-radius:0 10px 10px 0;padding:8px 12px;margin:8px 0}
+.warn{background:var(--warnbg);color:var(--warn);border-radius:8px;padding:6px 10px;font-size:14px;margin:8px 0}
+.back{background:none;border:0;color:var(--ac);font:inherit;padding:6px 0}
+h2{font-size:15px;margin:16px 0 4px;color:var(--sub);font-weight:600}
+.note{font-size:12px;color:var(--sub);margin-top:24px}
+
+.tabs button{font-size:14px;padding:9px 2px}
+.lo{stroke:var(--bd)}.li{stroke:var(--acbg)}.sh{fill:var(--acbg);stroke:var(--bd);stroke-width:1.5}
+.lb{fill:var(--tx);stroke:var(--bg);stroke-width:2.5px;paint-order:stroke;font-size:8px}.cp{fill:var(--sub);font-size:10px}
+.chip.on{background:var(--ac);color:var(--bg)}
+.scr{display:flex;gap:6px;overflow-x:auto;padding:2px 0 6px}.scr .chip{white-space:nowrap}
+textarea.ed{font-family:ui-monospace,monospace;font-size:13px;min-height:160px}
+</style>
+</head>
+<body>
+<div class="w">
+<h1>ツボ逆引き</h1>
+<div class="tabs"><button data-t="1" class="on">症状</button><button data-t="2">証</button><button data-t="3">経穴</button><button data-t="4">編集</button></div>
+<input id="q" type="search" placeholder="症状を入力(例: かたこり、ずつう)">
+<div id="main"></div>
+<p class="note">たたき台データです。位置・対応は必ずご自身の知識で確認・修正してください。</p>
+</div>
+<script>
+const D={};
+D.pt=`中府|ちゅうふ|LU1|鎖骨下窩の外方、第1肋間の高さ
+列欠|れっけつ|LU7|橈骨茎状突起の上方1.5寸、腕橈骨筋腱の際
+太淵|たいえん|LU9|手関節掌側横紋上、橈骨動脈拍動部
+合谷|ごうこく|LI4|手背、第1・2中手骨の間、第2中手骨の橈側中点付近|妊娠中は避けるとされることが多い
+曲池|きょくち|LI11|肘を曲げ、肘窩横紋外端と上腕骨外側上顆の中間
+肩髃|けんぐう|LI15|肩峰の前下方、腕を挙げたときの陥凹
+迎香|げいこう|LI20|鼻翼外縁中点の外方、鼻唇溝中
+頬車|きょうしゃ|ST6|下顎角の前上方、咬筋隆起部
+下関|げかん|ST7|頬骨弓下縁、下顎切痕の陥凹(口を閉じて取る)
+天枢|てんすう|ST25|臍中央の外方2寸
+梁丘|りょうきゅう|ST34|膝蓋骨外上縁の上方2寸
+足三里|あしさんり|ST36|犢鼻の下3寸、脛骨前縁から外方へ一横指
+豊隆|ほうりゅう|ST40|外果尖の上8寸、脛骨前縁から外方二横指
+内庭|ないてい|ST44|足背、第2・3趾間の水かき後方
+公孫|こうそん|SP4|第1中足骨底の前下方、赤白肉際
+三陰交|さんいんこう|SP6|内果尖の上3寸、脛骨内側縁の後方|妊娠中は避ける
+陰陵泉|いんりょうせん|SP9|脛骨内側顆下縁の陥凹
+血海|けっかい|SP10|膝蓋骨内上縁の上方2寸
+神門|しんもん|HT7|手関節掌側横紋、尺側手根屈筋腱の橈側陥凹
+後渓|こうけい|SI3|第5中手指節関節の近位、尺側の横紋端
+天宗|てんそう|SI11|肩甲骨棘下窩の中央
+聴宮|ちょうきゅう|SI19|耳珠中央の前、口を開けた時の陥凹
+攅竹|さんちく|BL2|眉頭の陥凹
+天柱|てんちゅう|BL10|後髪際、僧帽筋外縁の陥凹(第2頸椎棘突起の高さ)
+肺兪|はいゆ|BL13|第3胸椎棘突起下、外方1.5寸
+肝兪|かんゆ|BL18|第9胸椎棘突起下、外方1.5寸
+脾兪|ひゆ|BL20|第11胸椎棘突起下、外方1.5寸
+腎兪|じんゆ|BL23|第2腰椎棘突起下、外方1.5寸
+大腸兪|だいちょうゆ|BL25|第4腰椎棘突起下、外方1.5寸
+次髎|じりょう|BL32|第2後仙骨孔|妊娠中は注意
+委中|いちゅう|BL40|膝窩横紋の中央
+承山|しょうざん|BL57|腓腹筋の二筋腹の下端、人字形の陥凹
+崑崙|こんろん|BL60|外果尖とアキレス腱の間の陥凹
+申脈|しんみゃく|BL62|外果尖の直下の陥凹
+湧泉|ゆうせん|KI1|足底、足趾を曲げたとき前方1/3の陥凹
+太渓|たいけい|KI3|内果尖とアキレス腱の間の陥凹
+照海|しょうかい|KI6|内果尖の直下の陥凹
+内関|ないかん|PC6|手関節掌側横紋の上方2寸、長掌筋腱と橈側手根屈筋腱の間
+外関|がいかん|TE5|手関節背側横紋の上方2寸、橈骨と尺骨の間
+支溝|しこう|TE6|手関節背側横紋の上方3寸、橈骨と尺骨の間
+翳風|えいふう|TE17|耳垂後方、乳様突起と下顎角の間の陥凹
+率谷|そっこく|GB8|耳尖の直上、前髪際から入る髪際上1.5寸
+風池|ふうち|GB20|後頭骨下、胸鎖乳突筋と僧帽筋の間の陥凹
+肩井|けんせい|GB21|第7頸椎棘突起と肩峰外縁の中点|妊娠中は注意
+陽陵泉|ようりょうせん|GB34|腓骨頭前下方の陥凹
+環跳|かんちょう|GB30|大転子と仙骨裂孔を結ぶ線上、外1/3と内2/3の境
+足臨泣|あしりんきゅう|GB41|第4・5中足骨底接合部の遠位、小趾伸筋腱の外側
+太衝|たいしょう|LR3|足背、第1・2中足骨底接合部の遠位陥凹
+期門|きもん|LR14|乳頭の直下、第6肋間
+命門|めいもん|GV4|第2腰椎棘突起の下
+大椎|だいつい|GV14|第7頸椎棘突起の下
+百会|ひゃくえ|GV20|頭頂正中、両耳尖を結ぶ線との交点
+関元|かんげん|CV4|前正中線上、臍下3寸|妊娠中は避ける
+気海|きかい|CV6|前正中線上、臍下1.5寸
+中脘|ちゅうかん|CV12|前正中線上、臍上4寸
+膻中|だんちゅう|CV17|前正中線上、第4肋間(両乳頭の中間)
+印堂|いんどう|EX-HN3|両眉頭の中間
+太陽|たいよう|EX-HN5|眉尻と外眼角の中間から後方1横指の陥凹`;
+D.sy=`肩こり|肩凝り,かたこり,首肩,首こり|肩井,風池,天柱,天宗,曲池,合谷,後渓|頸肩部の基本:風池+天柱+肩井:項頸部の筋緊張を緩める;肩甲部:天宗+後渓:肩甲間部・肩甲骨周囲へ
+頭痛|ずつう,偏頭痛,片頭痛|風池,太陽,合谷,百会,太衝,率谷,天柱|四関穴:合谷+太衝:気血の巡りを整える;側頭部:率谷+太陽:偏頭痛の局所
+眼精疲労|目の疲れ,めのつかれ,がんせいひろう,目|攅竹,太陽,風池,天柱,合谷,太衝|頸部から目へ:風池+天柱:後頭下筋群を緩める;局所:攅竹+太陽:眼周囲の緊張緩和
+腰痛|ようつう,ぎっくり腰,こし|腎兪,大腸兪,次髎,委中,崑崙,環跳,命門|腰痛の定番:腎兪+大腸兪+委中:局所+遠隔;下肢後面:委中+崑崙:膀胱経の流れを通す
+膝痛|ひざ,ひざいたい,しつつう|梁丘,足三里,陽陵泉,陰陵泉,血海|膝周囲:梁丘+血海+陽陵泉:局所の巡りを改善
+不眠|ふみん,眠れない,ねむれない,睡眠|神門,三陰交,百会,照海,申脈,内関|心腎不交のイメージ:神門+三陰交:心神を安んじる;照海・申脈:照海+申脈:睡眠・覚醒の調整(陰蹻・陽蹻)
+冷え|ひえ,冷え性,ひえしょう,冷える|関元,気海,三陰交,太渓,湧泉,足三里|下腹部を温める:関元+気海:下焦の陽気を補う;下肢の冷え:三陰交+太渓+湧泉:下肢の冷え全般
+倦怠感|疲労,だるい,疲れ,つかれ,けんたいかん|足三里,気海,関元,三陰交,太渓|脾胃を補う:足三里+三陰交:気血を養う
+便秘|べんぴ|天枢,大腸兪,支溝,合谷,足三里|腑気を通す:天枢+支溝:便通を促す
+下痢|げり,軟便|天枢,中脘,足三里,脾兪,陰陵泉|脾胃を整える:中脘+足三里+天枢:胃腸機能の調整
+胃痛・胃もたれ|いたい,胃,いもたれ,胃痛,消化不良|中脘,足三里,内関,公孫,脾兪|八脈交会の組合せ:内関+公孫:胃・胸・心の症状;胃の基本:中脘+足三里:腹部+遠隔
+吐き気|はきけ,悪心,おしん,つわり|内関,中脘,足三里,公孫|悪心の定番:内関+中脘:胃気を降ろす
+生理痛|せいりつう,月経痛,げっけいつう,月経不順|三陰交,関元,次髎,血海,太衝|下腹・仙骨部:関元+次髎:局所の血行改善;血を巡らせる:血海+三陰交:婦人科の基本
+めまい|眩暈,ふらつき|百会,風池,太衝,内関,豊隆|肝陽・痰の両面:太衝+豊隆:上衝や痰湿の調整
+耳鳴り|みみなり,難聴,なんちょう|翳風,聴宮,太渓,外関|耳周囲:翳風+聴宮:局所の巡り;腎との関連:太渓+外関:慢性例の遠隔
+鼻づまり|鼻炎,びえん,はな,花粉症,かふんしょう,鼻水|迎香,印堂,合谷,風池|鼻局所+遠隔:迎香+合谷:鼻閉の基本
+咳・喉の痛み|せき,のど,咳,喉,咽頭痛|列欠,太淵,肺兪,大椎|肺経の定番:列欠+太淵:肺気を整える
+動悸・不安・イライラ|どうき,不安,いらいら,ストレス,緊張,きんちょう|内関,神門,太衝,膻中,百会|胸の詰まり:内関+膻中:気機を通す;肝気を巡らす:太衝+合谷:四関穴でイライラ対応
+こむら返り|こむらがえり,ふくらはぎ,足がつる|承山,委中,陽陵泉|腓腹部:承山+委中:筋の緊張緩和
+五十肩・肩の痛み|五十肩,ごじゅうかた,肩関節周囲炎,腕|肩髃,曲池,外関,肩井,天宗|肩関節局所:肩髃+天宗:前面と後面を押さえる;遠隔:曲池+外関:上肢の通経
+顎関節症|がくかんせつ,あご,顎|下関,聴宮,頬車,合谷|顎関節周囲:下関+聴宮+頬車:咬筋と関節包周囲
+むくみ|浮腫,ふしゅ,水分|陰陵泉,三陰交,足三里,腎兪|利水の基本:陰陵泉+三陰交:湿を除く`;
+D.zh=`肝鬱気滞|肝気鬱結,気滞|イライラ、脇肋部の張り、ため息、情緒で増悪、脈弦|疏肝解鬱・理気|太衝,合谷,期門,内関,膻中
+肝陽上亢|肝陽化風|頭痛、めまい、顔面紅潮、易怒、耳鳴り、脈弦|平肝潜陽|太衝,風池,百会,太渓,三陰交
+脾気虚|脾虚|食欲不振、軟便、倦怠感、顔色萎黄、脈弱|健脾益気|足三里,脾兪,中脘,気海,三陰交
+痰湿|湿痰,脾虚湿盛|身体の重だるさ、胸脇のつかえ、むくみ、舌苔膩、脈滑|健脾化湿・化痰|陰陵泉,豊隆,中脘,足三里,脾兪
+腎陽虚|腎陽不足|腰膝のだるさと冷え、夜間頻尿、浮腫、寒がり、脈沈遅|温補腎陽|腎兪,命門,関元,気海,太渓
+腎陰虚|腎精不足|腰膝酸軟、耳鳴り、ほてり、寝汗、不眠、舌紅少苔、脈細数|滋補腎陰|太渓,照海,三陰交,腎兪,神門
+血虚|心血虚|顔色不華、めまい、動悸、不眠、爪の脆弱、月経量少、脈細|補血養血|三陰交,血海,足三里,脾兪,神門
+血瘀|瘀血|固定性の刺痛、舌の暗紫や瘀斑、月経痛、脈渋|活血化瘀|血海,三陰交,太衝,合谷,次髎
+心脾両虚|心脾不足|動悸、不眠、多夢、食欲不振、倦怠、顔色不華|補益心脾|神門,内関,脾兪,足三里,三陰交
+風寒外感|風寒|悪寒、無汗、頭痛、項背のこわばり、鼻水、脈浮緊|疏風散寒|風池,大椎,列欠,合谷,天柱`;
+D.tg=`太淵|原穴,五兪穴(兪・土)
+合谷|原穴
+曲池|五兪穴(合・土)
+足三里|下合穴(胃),五兪穴(合・土)
+内庭|五兪穴(滎・水)
+陰陵泉|五兪穴(合・水)
+神門|原穴,五兪穴(兪・土)
+後渓|八脈交会穴,五兪穴(兪・木)
+委中|下合穴(膀胱),五兪穴(合・土)
+崑崙|五兪穴(経・火)
+申脈|八脈交会穴
+湧泉|五兪穴(井・木)
+太渓|原穴,五兪穴(兪・土)
+照海|八脈交会穴
+太衝|原穴,五兪穴(兪・土)
+陽陵泉|下合穴(胆),八会穴(筋),五兪穴(合・土)
+足臨泣|八脈交会穴,五兪穴(兪・木)
+支溝|五兪穴(経・火)
+列欠|絡穴,八脈交会穴
+豊隆|絡穴
+公孫|絡穴,八脈交会穴
+内関|絡穴,八脈交会穴
+外関|絡穴,八脈交会穴
+梁丘|郄穴
+中府|募穴(肺)
+天枢|募穴(大腸)
+中脘|募穴(胃),八会穴(腑)
+期門|募穴(肝)
+関元|募穴(小腸)
+膻中|募穴(心包),八会穴(気)
+肺兪|背部兪穴
+肝兪|背部兪穴
+脾兪|背部兪穴
+腎兪|背部兪穴
+大腸兪|背部兪穴`;
+// 図の座標: 名 面(f前/b後) 正中からの距離 y
+const CO={};
+`百会 f 0 6
+百会 b 0 6
+印堂 f 0 19
+攅竹 f 7 17
+太陽 f 15 21
+迎香 f 4 29
+頬車 f 12 33
+率谷 f 17 12
+中府 f 30 58
+膻中 f 0 76
+期門 f 18 90
+中脘 f 0 96
+天枢 f 12 112
+気海 f 0 119
+関元 f 0 127
+肩髃 f 40 54
+曲池 f 49 82
+内関 f 51 110
+列欠 f 56 106
+太淵 f 56 119
+神門 f 47 119
+梁丘 f 26 178
+血海 f 14 178
+足三里 f 25 212
+陽陵泉 f 31 205
+陰陵泉 f 14 203
+豊隆 f 28 226
+三陰交 f 15 232
+公孫 f 14 246
+太衝 f 20 246
+足臨泣 f 26 246
+内庭 f 21 252
+天柱 b 6 38
+風池 b 11 36
+翳風 b 17 28
+大椎 b 0 48
+肩井 b 30 51
+肺兪 b 7 62
+天宗 b 24 68
+肝兪 b 7 84
+脾兪 b 7 94
+腎兪 b 7 106
+命門 b 0 106
+大腸兪 b 7 116
+次髎 b 5 128
+環跳 b 28 136
+委中 b 20 190
+承山 b 20 222
+崑崙 b 26 244
+申脈 b 26 249
+太渓 b 17 244
+照海 b 17 249
+支溝 b 52 100
+外関 b 52 108
+後渓 b 56 134
+合谷 b 62 132`.split("\n").forEach(l=>{const a=l.trim().split(" ");if(a.length==4)(CO[a[0]]=CO[a[0]]||[]).push([a[1],+a[2],+a[3]])});
+const MER={LU:"肺経",LI:"大腸経",ST:"胃経",SP:"脾経",HT:"心経",SI:"小腸経",BL:"膀胱経",KI:"腎経",PC:"心包経",TE:"三焦経",GB:"胆経",LR:"肝経",GV:"督脈",CV:"任脈",EX:"奇穴"};
+let PT,SY,ZH,TG,cur;
+const L=k=>cur[k].split("\n").map(s=>s.trim()).filter(Boolean);
+function parse(){PT={};TG={};
+ L("pt").forEach(l=>{const a=l.split("|");PT[a[0]]={n:a[0],r:a[1]||"",c:a[2]||"",loc:a[3]||"",note:a[4]||""}});
+ L("tg").forEach(l=>{const a=l.split("|");TG[a[0]]=a[1]||""});
+ SY=L("sy").map(l=>{const a=l.split("|");return{n:a[0],syn:a[1]||"",pts:(a[2]||"").split(",").filter(Boolean),sets:(a[3]||"").split(";").filter(Boolean).map(s=>{const b=s.split(":");return{n:b[0],p:(b[1]||"").split("+").filter(Boolean),aim:b[2]||""}})}});
+ ZH=L("zh").map(l=>{const a=l.split("|");return{n:a[0],syn:a[1]||"",sig:a[2]||"",tx:a[3]||"",pts:(a[4]||"").split(",").filter(Boolean)}})}
+function load(){let o={};try{o=JSON.parse(localStorage.getItem("tsd")||"{}")}catch(e){}cur=Object.assign({},D,o);parse()}
+const $=s=>document.querySelector(s);
+let memo={};try{memo=JSON.parse(localStorage.getItem("tsm")||"{}")}catch(e){}
+const save=()=>{try{localStorage.setItem("tsm",JSON.stringify(memo))}catch(e){}};
+const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const kana=s=>s.replace(/[ァ-ヶ]/g,c=>String.fromCharCode(c.charCodeAt(0)-96)).toLowerCase();
+const mer=c=>MER[c.slice(0,2)]||"";
+const tg=n=>TG[n]||"";
+let st={tab:1,sym:null,zh:null,pt:null,q:"",m:"",g:"",rc:0};
+const chip=n=>`<button class="chip" data-p="${n}">${n}</button>`;
+const pcard=n=>{const p=PT[n];return p?`<div class="card" data-p="${n}"><span class="nm">${n}</span> <small>${p.r}</small><span class="tag">${p.c}</span><span class="tag">${mer(p.c)}</span>${tg(n)?`<span class="tag">${tg(n)}</span>`:""}<div class="sub">${p.loc}</div>${p.note?`<div class="sub" style="color:var(--warn)">⚠ ${p.note}</div>`:""}</div>`:""};
+function body(pts){
+ const on=pts.filter(n=>CO[n]),off=pts.filter(n=>!CO[n]&&PT[n]);
+ const limb=(x1,y1,x2,y2,w)=>`<line class="lo" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke-width="${w+3}"/><line class="li" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke-width="${w}"/>`;
+ let s=`<svg viewBox="0 0 420 268" width="100%" style="max-width:520px;display:block;margin:8px auto" role="img" aria-label="経穴の位置(目安)" stroke-linecap="round">`;
+ [["f",100,"前面"],["b",320,"背面"]].forEach(([v,cx,lb])=>{
+  s+=limb(cx-22,134,cx-22,250,24)+limb(cx+22,134,cx+22,250,24)+limb(cx-38,56,cx-60,138,14)+limb(cx+38,56,cx+60,138,14);
+  s+=`<rect class="sh" x="${cx-38}" y="46" width="76" height="90" rx="16"/><circle class="sh" cx="${cx}" cy="24" r="17"/><text class="cp" x="${cx}" y="264" text-anchor="middle">${lb}</text>`;
+  on.forEach(n=>CO[n].filter(c=>c[0]==v).forEach(([,dx,y])=>{
+   (dx?[-dx,dx]:[0]).forEach(o=>{s+=`<circle cx="${cx+o}" cy="${y}" r="3.4" fill="#d1493a" stroke="#fff" stroke-width="1"/>`});
+   s+=`<text class="lb" x="${cx+dx+5}" y="${y+3}">${n}</text>`}))});
+ return s+`</svg><div class="sub">${off.length?"図未登録: "+off.join("・")+"。":""}位置は目安です。取穴は骨度・触診で確認してください。</div>`}
+function render(){
+ document.querySelectorAll(".tabs button").forEach(b=>b.className=b.dataset.t==st.tab?"on":"");
+ const m=$("#main"),inner=st.sym||st.zh||st.pt;
+ $("#q").style.display=(inner||st.tab==4)?"none":"block";
+ $("#q").placeholder=["","症状を入力(例: かたこり)","証・所見を入力(例: 脾虚、冷え)","穴名・読み・経絡・要穴で検索(例: 胃経、原穴)"][st.tab];
+ const q=kana(st.q.trim());
+ if(st.pt){const p=PT[st.pt],us=SY.filter(s=>s.pts.includes(p.n)),zs=ZH.filter(z=>z.pts.includes(p.n));
+  m.innerHTML=`<button class="back" data-back>‹ 戻る</button><div class="nm" style="font-size:28px">${p.n}</div><div class="sub">${p.r} ・ ${p.c} ・ ${mer(p.c)}</div>${tg(p.n)?`<div class="chips"><span class="tag" style="margin:0">${tg(p.n)}</span></div>`:""}
+  <h2>位置</h2><div>${p.loc}</div>${p.note?`<div class="warn">⚠ ${p.note}</div>`:""}${body([p.n])}
+  <h2>登録されている症状</h2><div class="chips">${us.map(s=>`<button class="chip" data-s="${s.n}">${s.n}</button>`).join("")||"<span class=sub>なし</span>"}</div>
+  <h2>関連する証</h2><div class="chips">${zs.map(z=>`<button class="chip" data-z="${z.n}">${z.n}</button>`).join("")||"<span class=sub>なし</span>"}</div>
+  <h2>自分用メモ(刺鍼の深さ・灸の壮数・反応など)</h2><textarea id="memo">${esc(memo[p.n]||"")}</textarea>`;
+  $("#memo").oninput=e=>{memo[p.n]=e.target.value;save()};return}
+ if(st.sym){const s=SY.find(x=>x.n==st.sym);
+  m.innerHTML=`<button class="back" data-back>‹ 症状一覧</button><div class="nm" style="font-size:26px">${s.n}</div>
+  <h2>配穴の例</h2>${s.sets.map(x=>`<div class="set"><b>${x.n}</b><div class="chips">${x.p.map(chip).join("")}</div><div class="sub">${x.aim}</div></div>`).join("")}
+  ${body(s.pts)}<h2>関連する経穴</h2><div class="list">${s.pts.map(pcard).join("")}</div>`;return}
+ if(st.zh){const z=ZH.find(x=>x.n==st.zh);
+  m.innerHTML=`<button class="back" data-back>‹ 証一覧</button><div class="nm" style="font-size:26px">${z.n}</div><div class="sub">別名: ${z.syn}</div>
+  <h2>主な所見</h2><div>${z.sig}</div><h2>治法</h2><div>${z.tx}</div><h2>配穴例</h2><div class="chips">${z.pts.map(chip).join("")}</div>
+  ${body(z.pts)}<h2>経穴</h2><div class="list">${z.pts.map(pcard).join("")}</div>`;return}
+ if(st.tab==1){const r=SY.filter(s=>!q||kana(s.n+","+s.syn).includes(q));
+  m.innerHTML=`<div class="list">${r.map(s=>`<div class="card" data-s="${s.n}"><span class="nm">${s.n}</span><div class="sub">${s.pts.slice(0,5).join("・")}</div></div>`).join("")||"<p class=sub>該当なし。別の言い方で試してください。</p>"}</div>`}
+ else if(st.tab==2){const r=ZH.filter(z=>!q||kana(z.n+","+z.syn+","+z.sig).includes(q));
+  m.innerHTML=`<div class="list">${r.map(z=>`<div class="card" data-z="${z.n}"><span class="nm">${z.n}</span> <small>${z.tx}</small><div class="sub">${z.sig}</div></div>`).join("")||"<p class=sub>該当なし</p>"}</div>`}
+ else if(st.tab==3){const gs=["原穴","絡穴","郄穴","募穴","背部兪穴","下合穴","八会穴","八脈交会穴","五兪穴"];
+  const r=Object.values(PT).filter(p=>(!q||kana([p.n,p.r,p.c,mer(p.c),tg(p.n)].join(",")).includes(q))&&(!st.m||p.c.slice(0,2)==st.m)&&(!st.g||tg(p.n).includes(st.g)));
+  m.innerHTML=`<div class="scr">${Object.keys(MER).map(k=>`<button class="chip${st.m==k?" on":""}" data-m="${k}">${MER[k]}</button>`).join("")}</div><div class="scr">${gs.map(g=>`<button class="chip${st.g==g?" on":""}" data-g="${g}">${g}</button>`).join("")}</div><div class="sub">${r.length}穴</div><div class="list">${r.map(p=>pcard(p.n)).join("")||"<p class=sub>該当なし</p>"}</div>`}
+ else{m.innerHTML=`<p class="sub">1行1件、区切りは「|」。保存するとこの端末に残ります。</p>`+[["pt","経穴(名|読み|記号|位置|注意)"],["sy","症状(名|同義語,..|穴,..|配穴名:穴+穴:狙い;..)"],["zh","証(名|別名|所見|治法|穴,..)"],["tg","要穴区分(穴|区分,..)"]].map(([k,t])=>`<h2>${t}</h2><textarea class="ed" data-k="${k}">${esc(cur[k])}</textarea>`).join("")+`<div class="chips" style="margin-top:12px"><button class="chip" data-save>保存</button><button class="chip" data-reset>初期データに戻す</button></div><h2>バックアップ(データとメモ)</h2><div class="chips"><button class="chip" data-exp>書き出す</button><button class="chip" data-imp>読み込む</button></div><textarea id="bk" placeholder="書き出し結果がここに出ます。読み込むときは貼り付けて「読み込む」"></textarea><div id="msg" class="sub"></div>`}
+}
+document.addEventListener("click",e=>{
+ const t=e.target.closest("[data-p],[data-s],[data-z],[data-t],[data-m],[data-g],[data-back],[data-save],[data-reset],[data-exp],[data-imp]");if(!t)return;
+ const d=t.dataset,msg=s=>{$("#msg").textContent=s};
+ if(d.save!==undefined){document.querySelectorAll(".ed").forEach(x=>cur[x.dataset.k]=x.value);try{localStorage.setItem("tsd",JSON.stringify(cur))}catch(err){}parse();msg("保存しました");return}
+ if(d.reset!==undefined){if(!st.rc){st.rc=1;msg("もう一度押すと初期化します(メモは残ります)");return}st.rc=0;try{localStorage.removeItem("tsd")}catch(err){}load();render();return}
+ if(d.exp!==undefined){const s=JSON.stringify({d:cur,memo});$("#bk").value=s;try{navigator.clipboard.writeText(s)}catch(err){}msg("書き出しました。全選択してコピーし、メモ帳などに保存してください");return}
+ if(d.imp!==undefined){try{const o=JSON.parse($("#bk").value);cur=Object.assign({},D,o.d);memo=o.memo||{};save();localStorage.setItem("tsd",JSON.stringify(cur));parse();render();msg("読み込みました")}catch(err){msg("読み込めませんでした")}return}
+ if(d.t){st={tab:+d.t,sym:null,zh:null,pt:null,q:"",m:"",g:"",rc:0};$("#q").value=""}
+ else if(d.back!==undefined){if(st.pt)st.pt=null;else{st.sym=null;st.zh=null}}
+ else if(d.p)st.pt=d.p;
+ else if(d.s){st.pt=null;st.zh=null;st.tab=1;st.sym=d.s}
+ else if(d.z){st.pt=null;st.sym=null;st.tab=2;st.zh=d.z}
+ else if(d.m!==undefined)st.m=st.m==d.m?"":d.m;
+ else if(d.g!==undefined)st.g=st.g==d.g?"":d.g;
+ render();if(d.m===undefined&&d.g===undefined)window.scrollTo(0,0)});
+$("#q").oninput=e=>{st.q=e.target.value;render()};
+load();render();
+if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script>
+</body>
+</html>
